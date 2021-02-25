@@ -57,6 +57,7 @@ function ListEmployee(props) {
     const [employees, setEmployees] = useState([])
     const [openModalDel, setOpenModalDel] = useState(false);
     const [modalStyle] = useState(getModalStyle);
+
     //Modal Delete Employee
     //Open Delete Employee Modal
     const handleOpenDelEmployee = () => {
@@ -74,8 +75,8 @@ function ListEmployee(props) {
     }, [])
 
     //Delete Employee
-    async function handleDeleteEmployee(employees, _id) {
-        console.log(employees._id)
+    async function handleDeleteEmployee(_id) {
+        
         try {
             await api.delete(`nutemployee/${_id}`);
             setEmployees(employees.filter(employee => employee._id !== _id))
@@ -83,7 +84,7 @@ function ListEmployee(props) {
             alert('Erro to delete')
         }
     }
-
+    console.log(employees._id)
     return (
         <div>
             <ul style={{ margin: 0, padding: 0 }}>
@@ -100,7 +101,7 @@ function ListEmployee(props) {
                                 <IconButton color="primary" aria-label="edit people" component="span" >
                                     <Edit />
                                 </IconButton>
-                                <IconButton color="secondary" aria-label="delete people" component="span" onClick={handleOpenDelEmployee}>
+                                <IconButton color="secondary" aria-label="delete people" component="span" onClick={() => handleOpenDelEmployee(employee._id)}>
                                     <Delete />
                                 </IconButton>
                             </Grid>
