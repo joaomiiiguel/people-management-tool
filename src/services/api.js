@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // CRUD Token - https://crudcrud.com
-const tokenAPI = 'ec73b38a55bd4601b01a86b631611123';
+const tokenAPI = 'c6cdede087cc4cd09c433d251472e03c';
 
 const api = axios.create({
     baseURL:`https://crudcrud.com/api/${tokenAPI}`
