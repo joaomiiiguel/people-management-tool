@@ -1,7 +1,8 @@
+# People Management Tool
+
 ## Tecnologias usadas
 
-- [ReactJs](https://pt-br.reactjs.org) - Uma biblioteca JavaScript de código aberto com foco em criar interfaces de usuário em páginas web.
+- [ReactJs](https://pt-br.reactjs.org) - A JavaScript library for building user interfaces.
 - [Material-UI](https://material-ui.com/pt/) - React UI component library.
-
-- [Axios](https://github.com/axios/axios) - É um cliente HTTP que funciona tanto no browser quanto em node.js.
-- [JSON Server](https://www.npmjs.com/package/json-server) - Uma biblioteca capaz de simular uma API.
+- [Crud Crud](https://crudcrud.com) - Build web or mobile applications performing CRUD operations with no back-end code.
+- [Axios](https://github.com/axios/axios) - Promise based HTTP client for the browser and Node.js.

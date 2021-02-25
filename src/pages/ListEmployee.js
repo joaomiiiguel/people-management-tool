@@ -4,6 +4,8 @@ import { Grid, Typography, Paper, IconButton, Divider, Button, Modal } from '@ma
 import { Delete, Edit } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
+import EditEmployee from './EditEmployee';
+
 const useStyles = makeStyles((theme) => ({
     cardContainer: {
         textAlign: 'left',
@@ -56,11 +58,19 @@ function ListEmployee(props) {
     const classes = useStyles();
     const [employees, setEmployees] = useState([])
     const [openModalDel, setOpenModalDel] = useState(false);
+    const [openModalEdit, setOpenModalEdit] = useState(false);
     const [modalStyle] = useState(getModalStyle);
 
-    //Modal Delete Employee
+    useEffect(() => {
+        api.get('/nutemployee').then(response => {
+            setEmployees(response.data)
+        })
+    }, [])
+
+    //------------ Modal Delete Employee ---------------//
     //Open Delete Employee Modal
-    const handleOpenDelEmployee = () => {
+    const handleOpenDelEmployee = (_id) => {
+        console.log(_id)
         setOpenModalDel(true);
     };
     //Close Delete Employee Modal
@@ -68,23 +78,41 @@ function ListEmployee(props) {
         setOpenModalDel(false);
     };
 
-    useEffect(() => {
-        api.get('nutemployee').then(response => {
-            setEmployees(response.data)
-        })
-    }, [])
-
     //Delete Employee
     async function handleDeleteEmployee(_id) {
-        
+        console.log(_id)
         try {
-            await api.delete(`nutemployee/${_id}`);
+            await api.delete(`/nutemployee/6036e0e213120c03e81c66f1`);
             setEmployees(employees.filter(employee => employee._id !== _id))
         } catch (err) {
             alert('Erro to delete')
         }
     }
-    console.log(employees._id)
+
+
+
+      //------------ Modal Edit Employee ---------------//
+    //Open Edit Employee Modal
+    const handleOpenEditEmployee = (_id) => {
+        console.log(_id)
+        setOpenModalEdit(true);
+    };
+    //Close Edit Employee Modal
+    const handleCloseEditEmployee = () => {
+        setOpenModalEdit(false);
+    };
+
+    //Edit Employee
+    async function handleEditEmployee(_id) {
+        console.log(_id)
+        try {
+            await api.put(`/nutemployee/6036e0e213120c03e81c66f1`);
+            setEmployees(employees.filter(employee => employee._id !== _id))
+        } catch (err) {
+            alert('Erro to edit')
+        }
+    }
+    
     return (
         <div>
             <ul style={{ margin: 0, padding: 0 }}>
@@ -98,7 +126,7 @@ function ListEmployee(props) {
                             </Grid>
 
                             <Grid item>
-                                <IconButton color="primary" aria-label="edit people" component="span" >
+                                <IconButton color="primary" aria-label="edit people" component="span" onClick={() => handleOpenEditEmployee(employee._id)}>
                                     <Edit />
                                 </IconButton>
                                 <IconButton color="secondary" aria-label="delete people" component="span" onClick={() => handleOpenDelEmployee(employee._id)}>
@@ -135,6 +163,16 @@ function ListEmployee(props) {
                     </Grid>
 
                 </div>
+            </Modal>
+
+
+            <Modal
+                open={openModalEdit}
+                onClose={handleCloseEditEmployee}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+            >
+                <EditEmployee />
             </Modal>
         </div>
 

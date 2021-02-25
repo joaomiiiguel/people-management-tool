@@ -60,15 +60,15 @@ const genderData = [
 ];
 
 
-function NewEmployee(props) {
+function EditEmployee(props) {
     const classes = useStyles();
     const [modalStyle] = useState(getModalStyle);
     const [openModalEmployee, setOpenModalEmployee] = useState(false);
     //Settings Form
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
+    const [name, setName] = useState();
+    const [email, setEmail] = useState();
     const [CPF, setCPF] = useState();
-    const [team, setTeam] = useState('');
+    const [team, setTeam] = useState();
     const [gender, setGender] = useState('');
     const [birthday, setBirthday] = useState('');
     const [startDate, setStartDate] = useState('');
@@ -95,8 +95,8 @@ function NewEmployee(props) {
         })
 
         try {
-            const response = await api.post('nutemployee', data)
-            alert('Cadastro finalizado')
+            const response = await api.put('nutemployee', data)
+            alert('Cadastro atualizado')
         } catch (err) {
             alert('Erro no cadastro')
         }
@@ -227,4 +227,4 @@ function NewEmployee(props) {
     );
 }
 
-export default NewEmployee;
+export default EditEmployee;
