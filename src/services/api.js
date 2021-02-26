@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 // CRUD Token - https://crudcrud.com
-const tokenAPI = 'c6cdede087cc4cd09c433d251472e03c';
+const tokenAPI = 'fc812553f964452fb3c311d4ce56cded';
 
 /*
 const express = require('express')

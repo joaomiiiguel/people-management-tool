@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DatePicker } from "@material-ui/pickers";
 import api from '../services/api'
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button, TextField, MenuItem } from '@material-ui/core';
@@ -33,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
     },
+    selectInput:{
+        width: '100%'
+    }
 }))
 
 // Centralizar o Modal
@@ -49,8 +53,8 @@ function getModalStyle() {
 
 const teamData = [
     { value: 'Mobile', label: 'Mobile', },
-    { value: 'Front-end', label: 'Front-end', },
-    { value: 'Back-end', label: 'Back-end', },
+    { value: 'Frontend', label: 'Front-end', },
+    { value: 'Backend', label: 'Back-end', },
 ];
 
 const genderData = [
@@ -70,8 +74,8 @@ function NewEmployee(props) {
     const [CPF, setCPF] = useState();
     const [team, setTeam] = useState('');
     const [gender, setGender] = useState('');
-    const [birthday, setBirthday] = useState('');
-    const [startDate, setStartDate] = useState('');
+    const [birthday, setBirthday] = useState(new Date());
+    const [startDate, setStartDate] = useState(new Date());
 
     const handleChangeTeam = (event) => {
         setTeam(event.target.value);
@@ -187,35 +191,34 @@ function NewEmployee(props) {
                         </TextField>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TextField
-                            id="date"
-                            required
-                            label="Birthday"
-                            type="date"
-                            variant="outlined"
-                            name="Birthday"
+                        <DatePicker
+                            disableFuture
+                            openTo="date"
+                            inputVariant="outlined"
+                            orientation="landscape"
+                            format="dd/MM/yyyy"
+                            label="Date of birth"
+                            views={["date", "month", "year"]}
+                            showTodayButton="true"
                             value={birthday}
-                            onChange={e => setBirthday(e.target.value)}
+                            onChange={setBirthday}
+                            required
                             fullWidth
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
                         />
+                        
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TextField
-                            id="start-date"
-                            required
-                            name="Start Date"
+                    <DatePicker
+                            autoOk
+                            openTo="month"
+                            inputVariant="outlined"
+                            format="MM/yyyy"
                             label="Start Date"
-                            type="date"
-                            variant="outlined"
+                            views={["month", "year"]}
                             value={startDate}
-                            onChange={e => setStartDate(e.target.value)}
+                            onChange={setStartDate}
+                            required
                             fullWidth
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
                         />
                     </Grid>
                     <Grid item xs={12}>

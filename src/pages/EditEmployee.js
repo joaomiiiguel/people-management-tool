@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import api from '../services/api'
+import React, { useState, useEffect } from 'react';
+import api from '../services/api';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button, TextField, MenuItem } from '@material-ui/core';
+import { DatePicker } from "@material-ui/pickers";
 
 //Styles components
 const useStyles = makeStyles((theme) => ({
@@ -49,8 +50,8 @@ function getModalStyle() {
 
 const teamData = [
     { value: 'Mobile', label: 'Mobile', },
-    { value: 'Front-end', label: 'Front-end', },
-    { value: 'Back-end', label: 'Back-end', },
+    { value: 'Frontend', label: 'Front-end', },
+    { value: 'Backend', label: 'Back-end', },
 ];
 
 const genderData = [
@@ -63,7 +64,8 @@ const genderData = [
 function EditEmployee(props) {
     const classes = useStyles();
     const [modalStyle] = useState(getModalStyle);
-    const [openModalEmployee, setOpenModalEmployee] = useState(false);
+    const [data, setData] = useState()
+
     //Settings Form
     const [name, setName] = useState();
     const [email, setEmail] = useState();
@@ -72,6 +74,14 @@ function EditEmployee(props) {
     const [gender, setGender] = useState('');
     const [birthday, setBirthday] = useState('');
     const [startDate, setStartDate] = useState('');
+
+
+    useEffect(() => {
+        api.get('/nutemployee' + props._id).then(response => {
+            setData(response.data)
+        })
+    }, [])
+
 
     const handleChangeTeam = (event) => {
         setTeam(event.target.value);
@@ -82,33 +92,17 @@ function EditEmployee(props) {
 
 
     //Add Employee
-    async function handleRegister(e, _id) {
-
-        const data = ({
-            name,
-            email,
-            CPF,
-            team,
-            gender,
-            birthday,
-            startDate
-        })
-
-        try {
-            const response = await api.put('nutemployee', data)
-            alert('Cadastro atualizado')
-        } catch (err) {
-            alert('Erro no cadastro')
-        }
+    async function handleChangerEditEmployee( _id) {
+        console.log(_id)
     }
     return (
         <div style={modalStyle} className={classes.paper}>
             <Grid className={classes.headerForm}>
                 <Typography variant="h6">
-                    New Employee
+                    Edit Employee
                 </Typography>
             </Grid>
-            <form onSubmit={handleRegister}>
+            <form onSubmit={handleChangerEditEmployee}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <TextField
@@ -187,35 +181,34 @@ function EditEmployee(props) {
                         </TextField>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TextField
-                            id="date"
-                            required
-                            label="Birthday"
-                            type="date"
-                            variant="outlined"
-                            name="Birthday"
+                        <DatePicker
+                            disableFuture
+                            openTo="date"
+                            inputVariant="outlined"
+                            orientation="landscape"
+                            format="dd/MM/yyyy"
+                            label="Date of birth"
+                            views={["date", "month", "year"]}
+                            showTodayButton="true"
                             value={birthday}
-                            onChange={e => setBirthday(e.target.value)}
+                            onChange={setBirthday}
+                            required
                             fullWidth
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
                         />
+                        
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <TextField
-                            id="start-date"
-                            required
-                            name="Start Date"
+                    <DatePicker
+                            autoOk
+                            openTo="month"
+                            inputVariant="outlined"
+                            format="MM/yyyy"
                             label="Start Date"
-                            type="date"
-                            variant="outlined"
+                            views={["month", "year"]}
                             value={startDate}
-                            onChange={e => setStartDate(e.target.value)}
+                            onChange={setStartDate}
+                            required
                             fullWidth
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
                         />
                     </Grid>
                     <Grid item xs={12}>

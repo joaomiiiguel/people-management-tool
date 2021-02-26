@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 16,
         marginTop: 5
     },
-    paperDelete: {
+    paper: {
         position: 'absolute',
         width: '50%',
         maxWidth: 400,
@@ -38,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-around',
         marginBottom: 10
     },
+    buttonName: {
+        fontSize: 18
+    }
 }))
 // Centralizar o Modal
 function getModalStyle() {
@@ -57,7 +60,7 @@ function getModalStyle() {
 function ListEmployee(props) {
     const classes = useStyles();
     const [employees, setEmployees] = useState([])
-    const [openModalDel, setOpenModalDel] = useState(false);
+    const [openModalView, setOpenModalView] = useState(false);
     const [openModalEdit, setOpenModalEdit] = useState(false);
     const [modalStyle] = useState(getModalStyle);
 
@@ -67,22 +70,12 @@ function ListEmployee(props) {
         })
     }, [])
 
-    //------------ Modal Delete Employee ---------------//
-    //Open Delete Employee Modal
-    const handleOpenDelEmployee = (_id) => {
-        console.log(_id)
-        setOpenModalDel(true);
-    };
-    //Close Delete Employee Modal
-    const handleCloseDelEmployee = () => {
-        setOpenModalDel(false);
-    };
 
     //Delete Employee
     async function handleDeleteEmployee(_id) {
         console.log(_id)
         try {
-            await api.delete(`/nutemployee/6036e0e213120c03e81c66f1`);
+            await api.delete(`/nutemployee/${_id}`);
             setEmployees(employees.filter(employee => employee._id !== _id))
         } catch (err) {
             alert('Erro to delete')
@@ -90,11 +83,11 @@ function ListEmployee(props) {
     }
 
 
-
-      //------------ Modal Edit Employee ---------------//
+    //------------ Modal Edit Employee ---------------//
     //Open Edit Employee Modal
     const handleOpenEditEmployee = (_id) => {
         console.log(_id)
+
         setOpenModalEdit(true);
     };
     //Close Edit Employee Modal
@@ -106,22 +99,45 @@ function ListEmployee(props) {
     async function handleEditEmployee(_id) {
         console.log(_id)
         try {
-            await api.put(`/nutemployee/6036e0e213120c03e81c66f1`);
-            setEmployees(employees.filter(employee => employee._id !== _id))
+            await api.put(`/nutemployee/` + _id);
         } catch (err) {
             alert('Erro to edit')
         }
     }
-    
+
+    //------------ Modal View Employee ---------------//
+    //Open View Employee Modal
+    const handleOpenViewEmployee = (_id) => {
+        console.log(_id)
+
+        setOpenModalView(true);
+    };
+    //Close View Employee Modal
+    const handleCloseViewEmployee = () => {
+        setOpenModalView(false);
+    };
+
+    //View Employee
+    async function handleViewEmployee(_id) {
+        console.log(_id)
+        try {
+            await api.get(`/nutemployee/${_id}`);
+            setEmployees(employees.filter(employee => employee._id === _id))
+        } catch (err) {
+            alert('Erro to View')
+        }
+    }
+
+
     return (
         <div>
             <ul style={{ margin: 0, padding: 0 }}>
-                {employees.reverse().map(employee => (
+                {employees.map(employee => (
                     <Paper elevation={3} className={classes.cardContainer} key={employee._id}>
                         <Grid container alignItems="center">
                             <Grid item xs>
                                 <Typography variant="h6">
-                                    {employee.name}
+                                    <Button fullWidth size="small" className={classes.buttonName} onClick={() => handleOpenViewEmployee(employee._id)}>{employee.name}</Button>
                                 </Typography>
                             </Grid>
 
@@ -129,43 +145,62 @@ function ListEmployee(props) {
                                 <IconButton color="primary" aria-label="edit people" component="span" onClick={() => handleOpenEditEmployee(employee._id)}>
                                     <Edit />
                                 </IconButton>
-                                <IconButton color="secondary" aria-label="delete people" component="span" onClick={() => handleOpenDelEmployee(employee._id)}>
+                                <IconButton color="secondary" aria-label="delete people" component="span" onClick={() => handleDeleteEmployee(employee._id)}>
                                     <Delete />
                                 </IconButton>
                             </Grid>
                         </Grid>
                         <Divider />
-                        <Typography className={classes.textSecondary} variant="body2"><strong>Team:</strong> {employee.teamSelect}</Typography>
+                        <Typography className={classes.textSecondary} variant="body2"><strong>Team:</strong> {employee.team}</Typography>
                         <Typography className={classes.textSecondary} variant="body2"><strong>Email:</strong> {employee.email}</Typography>
-                        <Typography className={classes.textSecondary} variant="body2"><strong>Start Date:</strong> {employee.startDate}</Typography>
+                        <Typography className={classes.textSecondary} variant="body2"><strong>Start Date:</strong> {employee.bir}</Typography>
                     </Paper>
 
 
                 ))}
             </ul>
 
+
             <Modal
-                open={openModalDel}
-                onClose={handleCloseDelEmployee}
+                open={openModalView}
+                onClose={handleCloseViewEmployee}
                 aria-labelledby="simple-modal-title"
                 aria-describedby="simple-modal-description"
             >
-                <div style={modalStyle} className={classes.paperDelete}>
+                <div style={modalStyle} className={classes.paper}>
                     <Grid className={classes.headerForm}>
-                        <Typography variant="h5">
-                            Delete this Employee?
+                        <Typography variant="h6">
+                            View Employee
                 </Typography>
                     </Grid>
-
-                    <Grid container item xs={12} className={classes.AddButtons}>
-                        <Button variant="contained" color="secondary" size="large" onClick={handleDeleteEmployee}>Confirm</Button>
-                        <Button variant="contained" size="large" onClick={handleCloseDelEmployee}>Cancel</Button>
+                    <Grid container spacing={3} key={employees._id}>
+                        <Grid item xs={12}>
+                            <Typography>Name: {employees.name}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography>E-mail: {employees.name}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Typography>CPF: {employees.name}</Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Typography>Team: {employees.name}</Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Typography>Gender: {employees.name}</Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Typography>Birthday: {employees.name}</Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Typography>Start Date: {employees.name}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button variant="contained" color="primary" fullWidth size="large" onClick={handleCloseViewEmployee}>Close</Button>
+                        </Grid>
                     </Grid>
-
                 </div>
             </Modal>
-
-
             <Modal
                 open={openModalEdit}
                 onClose={handleCloseEditEmployee}
